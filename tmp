@@ -1,0 +1,10 @@
+#!/bin/bash
+TRASH_DIR="/tmp/.trash"
+for file in $@
+do
+    if [ ! -d "$TRASH_DIR${PWD}" ]; then
+        mkdir -p "$TRASH_DIR${PWD}"
+    fi
+    mv -v "$file" "$TRASH_DIR${PWD}/$file"
+done
+
