@@ -1,10 +1,16 @@
-#!/bin/bash
-TRASH_DIR="/tmp/.trash"
-for file in $@
-do
-    if [ ! -d "$TRASH_DIR${PWD}" ]; then
-        mkdir -p "$TRASH_DIR${PWD}"
-    fi
-    mv -v "$file" "$TRASH_DIR${PWD}/$file"
-done
+#! /usr/bin/python
+import sys
+import os
+import datetime
+
+op_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%s')
+trash_dir = '/tmp/.trash'
+
+for file in sys.argv[1:]:
+    src = os.path.abspath(os.path.join('.', file))
+    dst = trash_dir + src
+    os.system('mkdir -p %s' % dst)
+    dst = os.path.join(dst, op_time)
+    os.rename(src, dst)
+    print src, '->', dst
 
