@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+TRASH_DIR=/tmp/.trash
+TRASH_LOG="$TRASH_DIR/.log"
+
+if [ -e $TRASH_LOG ]; then
+	cat -n "$TRASH_LOG"
+fi

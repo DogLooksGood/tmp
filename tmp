@@ -1,16 +1,29 @@
-#! /usr/bin/python
-import sys
-import os
-import datetime
+#!/usr/bin/env bash
 
-op_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%s')
-trash_dir = '/tmp/.trash'
+TRASH_DIR=/tmp/.trash
+TRASH_LOG="$TRASH_DIR/.log"
 
-for file in sys.argv[1:]:
-    src = os.path.abspath(os.path.join('.', file))
-    dst = trash_dir + src
-    os.system('mkdir -p %s' % dst)
-    dst = os.path.join(dst, op_time)
-    os.rename(src, dst)
-    print src, '->', dst
+if [ ! -d "$TRASH_DIR" ]; then
+	mkdir -p /tmp/.trash
+fi
+
+TIME=`date +"%Y-%m-%d %H:%M:%S"`
+
+for i in $@
+do
+	SRC="$PWD/$i"
+	if [ -e "$SRC" ]; then
+		DST="$TRASH_DIR/$TIME/$SRC"
+		DST_DIR=$(dirname "$DST")
+		echo $DST_DIR
+		mkdir -p "$DST_DIR"
+		mv "$SRC" "$DST"
+		#echo "$SRC -> $DST"
+		echo -e "$TIME\t$SRC" >> $TRASH_LOG
+	else
+		echo "$SRC not exists! pass"
+	fi
+done
+
+
 

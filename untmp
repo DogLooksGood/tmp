@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+TRASH_DIR=/tmp/.trash
+TRASH_LOG="$TRASH_DIR/.log"
+
+UNAME=`uname`
+
+RESTORE=`awk "NR==$1{print}" $TRASH_LOG`
+SRC=`echo "$RESTORE" | cut -f2`
+TIME=`echo "$RESTORE" | cut -f1`
+DST="$TRASH_DIR/$TIME/$SRC"
+if [ -e "$SRC" ]; then
+	echo "will overwrite?[y/n]:"
+	read -n1 Y
+	if [ "$Y" == "y" ]; then
+		mv "$DST" "$SRC"
+		if [ $UNAME == "Darwin" ]; then
+			sed -i ".bak" $1d "$TRASH_LOG"
+		else
+			sed -i $1d "$TRASH_LOG"
+		fi
+	else
+		echo "cancel"
+	fi
+else
+	mv "$DST" "$SRC"
+	if [ $UNAME == "Darwin" ]; then
+		sed -i ".bak" $1d "$TRASH_LOG"
+	else
+		sed -i $1d "$TRASH_LOG"
+	fi
+fi
+
