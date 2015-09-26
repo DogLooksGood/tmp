@@ -15,7 +15,7 @@ do
 	if [ -e "$SRC" ]; then
 		DST="$TRASH_DIR/$TIME/$SRC"
 		DST_DIR=$(dirname "$DST")
-		echo $DST_DIR
+		echo $SRC
 		mkdir -p "$DST_DIR"
 		mv "$SRC" "$DST"
 		#echo "$SRC -> $DST"
